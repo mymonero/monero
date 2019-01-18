@@ -31,7 +31,9 @@
 #include "logger.h"
 #include <sstream>
 
+#undef MONERO_DEFAULT_LOG_CATEGORY
 #define MONERO_DEFAULT_LOG_CATEGORY "default"
+
 
 #define MCFATAL(cat,x) (LOGGER_ERROR() << x); std::abort()
 #define MCERROR(cat,x) LOGGER_ERROR() << x

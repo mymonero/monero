@@ -1,4 +1,4 @@
-// Copyright (c) 2014-2018, The Monero Project
+// Copyright (c) 2016-2018, The Monero Project
 // 
 // All rights reserved.
 // 
@@ -25,33 +25,41 @@
 // INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
 // STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// 
-// Parts of this file are originally copyright (c) 2012-2013 The Cryptonote developers
 
-#include <stddef.h>
-#include <stdint.h>
-#include <string.h>
+#pragma once
 
-#include "hash-ops.h"
-#include "keccak.h"
+#include <boost/optional/optional.hpp>
+#include <cstdint>
+#include <string>
+#include <vector>
 
-void hash_permutation(union hash_state *state) {
-#if BYTE_ORDER == LITTLE_ENDIAN
-  keccakf((uint64_t*)state, 24);
-#else
-  uint64_t le_state[25];
-  memcpy_swap64le(le_state, state, 25);
-  keccakf(le_state, 24);
-  memcpy_swap64le(state, le_state, 25);
-#endif
-}
+namespace cryptonote
+{
+class core;
 
-void hash_process(union hash_state *state, const uint8_t *buf, size_t count) {
-  keccak1600(buf, count, (uint8_t*)state);
-}
+namespace rpc
+{
 
-void cn_fast_hash(const void *data, size_t length, char *hash) {
-  union hash_state state;
-  hash_process(&state, data, length);
-  memcpy(hash, &state, HASH_SIZE);
-}
+struct output_distribution_data
+{
+  std::vector<std::uint64_t> distribution;
+  std::uint64_t start_height;
+  std::uint64_t base;
+};
+
+class RpcHandler
+{
+  public:
+    RpcHandler() { }
+    virtual ~RpcHandler() { }
+
+    virtual std::string handle(const std::string& request) = 0;
+
+    static boost::optional<output_distribution_data>
+      get_output_distribution(core& src, std::uint64_t amount, std::uint64_t from_height, std::uint64_t to_height, bool cumulative);
+};
+
+
+}  // rpc
+
+}  // cryptonote
