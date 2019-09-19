@@ -1,4 +1,4 @@
-// Copyright (c) 2014-2018, The Monero Project
+// Copyright (c) 2014-2019, The Monero Project
 // 
 // All rights reserved.
 // 
@@ -35,7 +35,7 @@
 #include <vector>
 
 #include "crypto/hash.h"
-#include "common/int-util.h"
+#include "int-util.h"
 //#include "util.h"
 #include "varint.h"
 
@@ -235,7 +235,7 @@ namespace tools
       return encode(buf);
     }
 
-    bool decode_addr(std::string addr, uint64_t& tag, std::string& data)
+    bool decode_addr(const std::string &addr, uint64_t& tag, std::string& data)
     {
       std::string addr_data;
       bool r = decode(addr, addr_data);
