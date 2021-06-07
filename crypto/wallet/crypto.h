@@ -29,7 +29,7 @@
 #pragma once
 
 #include <cstddef>
-//#include "crypto/wallet/ops.h"
+#include "crypto/wallet/ops.h"
 
 namespace crypto {
   namespace wallet {
